@@ -1,10 +1,14 @@
 pipeline {
     agent any
 
+    environment {
+        PATH = "${env.PATH};C:\\Windows\\System32"
+    }
+
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/emotytto00/TempConverter'
+                git 'https://github.com/emotytto00/TempConverter.git'
             }
         }
 
@@ -20,17 +24,10 @@ pipeline {
             }
         }
 
-        stage('Code Coverage') {
-            steps {
+           post {
+                success {
+                junit '**/target/surefire-reports/*.xml'
                 jacoco execPattern: '**/target/jacoco.exec'
-            }
-        }
-    }
-
-    post {
-        always {
-            junit '**/target/surefire-reports/*.xml'
-            jacoco execPattern: '**/target/jacoco.exec'
         }
     }
 }
