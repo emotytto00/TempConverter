@@ -24,10 +24,17 @@ pipeline {
             }
         }
 
-           post {
-                success {
-                junit '**/target/surefire-reports/*.xml'
+        stage('Code Coverage') {
+            steps {
                 jacoco execPattern: '**/target/jacoco.exec'
+            }
+        }
+    }
+
+    post {
+        success {
+            junit '**/target/surefire-reports/*.xml'
+            jacoco execPattern: '**/target/jacoco.exec'
         }
     }
 }
