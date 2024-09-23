@@ -1,5 +1,5 @@
 pipeline {
-    agent any // IN THE LECTURE I WILL EXPLAIN THE SCRIPT AND THE WORKFLOW
+    agent any // Use any available agent
 
     stages {
         stage('Checkout') {
@@ -10,21 +10,13 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-                // Build Docker image
+                // Build Docker image without pushing to Docker Hub
                 script {
-                    docker.build("${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}")
-                }
-            }
-        }
-        stage('Push Docker Image to Docker Hub') {
-            steps {
-                // Push Docker image to Docker Hub
-                script {
-                    docker.withRegistry('https://index.docker.io/v1/', 'docker-hub-credentials') {
-                        docker.image.push("${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}")
-                    }
+                    // Change 'your-image-name' to a name for your Docker image
+                    def image = docker.build("https://github.com/emotytto00/TempConverter.git")
                 }
             }
         }
     }
 }
+
