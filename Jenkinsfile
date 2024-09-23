@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Define Docker Hub repository name
-        DOCKERHUB_REPO = 'johannesliikanen/TempConverter'
+        DOCKERHUB_REPO = 'johannesliikanen/sha256:2b7f8bae650feb3a43da35c121bd521570455d5fda65697fa4523d6d47a91108'
         // Define Docker image tag
         DOCKER_IMAGE_TAG = 'latest'
     }
@@ -26,7 +26,7 @@ pipeline {
             steps {
                 // Push Docker image to Docker Hub
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS_ID) {
+                    docker.withRegistry('https://index.docker.io/v1/') {
                         docker.image("${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}").push()
                     }
                 }
