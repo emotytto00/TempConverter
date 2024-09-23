@@ -2,8 +2,6 @@ pipeline {
     agent any // IN THE LECTURE I WILL EXPLAIN THE SCRIPT AND THE WORKFLOW
 
     environment {
-        // Define Docker Hub credentials ID
-        DOCKERHUB_CREDENTIALS_ID = 'johannesliikanen'
         // Define Docker Hub repository name
         DOCKERHUB_REPO = 'johannesliikanen/fartocelkelvin'
         // Define Docker image tag
