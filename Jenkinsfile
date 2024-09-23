@@ -20,8 +20,8 @@ pipeline {
             steps {
                 // Push Docker image to Docker Hub
                 script {
-                    docker push johannesliikanen/tempconverter_johannes:tagname
-
+                    docker.withRegistry('https://index.docker.io/v1/', 'docker-hub-credentials') {
+                        docker.image.push("${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}")
                     }
                 }
             }
