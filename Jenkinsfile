@@ -1,6 +1,14 @@
 pipeline {
-    agent any // Use any available agent
+    agent any // IN THE LECTURE I WILL EXPLAIN THE SCRIPT AND THE WORKFLOW
 
+    environment {
+        // Define Docker Hub credentials ID
+        DOCKERHUB_CREDENTIALS_ID = 'johannesliikanen'
+        // Define Docker Hub repository name
+        DOCKERHUB_REPO = 'johannesliikanen/tempconverter'
+        // Define Docker image tag
+        DOCKER_IMAGE_TAG = 'latest'
+    }
     stages {
         stage('Checkout') {
             steps {
@@ -10,13 +18,21 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-                // Build Docker image without pushing to Docker Hub
+                // Build Docker image
                 script {
-                    // Change 'your-image-name' to a name for your Docker image
-                    def image = docker.build("https://github.com/emotytto00/TempConverter.git")
+                    docker.build("${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}")
+                }
+            }
+        }
+        stage('Push Docker Image to Docker Hub') {
+            steps {
+                // Push Docker image to Docker Hub
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS_ID) {
+                        docker.image("${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}").push()
+                    }
                 }
             }
         }
     }
 }
-
