@@ -35,4 +35,8 @@ public class TemperatureConverterTest {
         assertFalse(converter.isExtremeTemperature(-40)); // -40 is not extreme
         assertFalse(converter.isExtremeTemperature(50));  // 50 is not extreme
     }
+    @Test
+    public void testKelvinToFah() {
+        assertEquals(32.0, TemperatureConverter.kelvinToFah(273.15), 0.001);
+    }
 }
