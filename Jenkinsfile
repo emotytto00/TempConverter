@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Define Docker Hub repository name
-        DOCKERHUB_REPO = 'johannesliikanen/sha256:2b7f8bae650feb3a43da35c121bd521570455d5fda65697fa4523d6d47a91108'
+        DOCKERHUB_REPO = 'johannesliikanen/TempConverter'
         // Define Docker image tag
         DOCKER_IMAGE_TAG = 'latest'
     }
