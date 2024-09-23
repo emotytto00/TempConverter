@@ -1,38 +1,50 @@
 pipeline {
-    agent any // IN THE LECTURE I WILL EXPLAIN THE SCRIPT AND THE WORKFLOW
+    agent any
 
     environment {
-        // Define Docker Hub credentials ID
-        DOCKERHUB_CREDENTIALS_ID = 'johannesliikanen'
-        // Define Docker Hub repository name
+        // DockerHub repository and image tag
         DOCKERHUB_REPO = 'johannesliikanen/tempconverter'
-        // Define Docker image tag
         DOCKER_IMAGE_TAG = 'latest'
     }
+
     stages {
         stage('Checkout') {
             steps {
-                // Checkout code from Git repository
+                // Checkout code from GitHub repository
                 git 'https://github.com/emotytto00/TempConverter.git'
             }
         }
+
         stage('Build Docker Image') {
             steps {
-                // Build Docker image
+                // Build the Docker image
                 script {
                     docker.build("${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}")
                 }
             }
         }
+
         stage('Push Docker Image to Docker Hub') {
             steps {
-                // Push Docker image to Docker Hub
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS_ID) {
-                        docker.image("${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}").push()
+                    // Use Jenkins credentials to log in to Docker Hub
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-docker',
+                        usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+
+                        // Log in to Docker Hub using Jenkins credentials
+                        sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
+
+                        // Push the Docker image to Docker Hub
+                        docker.withRegistry('https://index.docker.io/v1/', '') {
+                            docker.image("${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}").push()
+                        }
+
+                        // Log out from Docker Hub
+                        sh 'docker logout'
                     }
                 }
             }
         }
     }
 }
+
