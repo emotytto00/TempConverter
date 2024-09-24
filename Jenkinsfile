@@ -17,8 +17,8 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                // Build the Docker image
                 script {
+                    // Build the Docker image
                     docker.build("${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}")
                 }
             }
@@ -45,8 +45,5 @@ pipeline {
                 }
             }
         }
-
-        }
     }
 }
-
