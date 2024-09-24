@@ -6,7 +6,7 @@ pipeline {
             steps {
                 script {
                     // Build your Docker image
-                    bat 'docker build -t johannesliikanen/tempconverter:latest .'
+                    bat 'docker build -t johannesliikanen/tempconverter_johannes:latest .'
                 }
             }
         }
@@ -14,11 +14,8 @@ pipeline {
         stage('Push') {
             steps {
                 script {
-                    // Tag the image (if necessary)
-                    bat 'docker tag johannesliikanen/tempconverter:latest johannesliikanen/tempconverter:v1.0'
-
                     // Push the Docker image to Docker Hub
-                    bat 'docker push johannesliikanen/tempconverter:v1.0'
+                    bat 'docker push johannesliikanen/tempconverter_johannes:latest'
                 }
             }
         }
