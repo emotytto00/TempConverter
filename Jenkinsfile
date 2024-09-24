@@ -31,19 +31,21 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'dockerhub_johannes',
                         usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
 
-                        // Log in to Docker Hub using Jenkins credentials
-                        sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
+                        // Log in to Docker Hub using Jenkins credentials (Windows 'bat' command instead of 'sh')
+                        bat "echo %DOCKER_PASSWORD% | docker login -u %DOCKER_USERNAME% --password-stdin"
 
                         // Push the Docker image to Docker Hub
                         docker.withRegistry('https://index.docker.io/v1/', '') {
                             docker.image("${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}").push()
                         }
 
-                        // Log out from Docker Hub
-                        sh 'docker logout'
+                        // Log out from Docker Hub (Windows 'bat' command instead of 'sh')
+                        bat 'docker logout'
                     }
                 }
             }
+        }
+
         }
     }
 }
