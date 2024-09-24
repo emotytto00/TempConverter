@@ -14,8 +14,11 @@ pipeline {
         stage('Push') {
             steps {
                 script {
+                    // Tag the image (if necessary)
+                    bat 'docker tag johannesliikanen/tempconverter:latest johannesliikanen/tempconverter:v1.0'
+
                     // Push the Docker image to Docker Hub
-                    bat 'docker push johannesliikanen/tempconverter:latest'
+                    bat 'docker push johannesliikanen/tempconverter:v1.0'
                 }
             }
         }
