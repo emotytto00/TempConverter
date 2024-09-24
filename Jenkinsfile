@@ -1,43 +1,21 @@
 pipeline {
     agent any
 
-    environment {
-        DOCKERHUB_REPO = 'johannesliikanen/tempconverter'
-        DOCKER_IMAGE_TAG = 'latest'
-    }
-
     stages {
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/emotytto00/TempConverter.git'
-            }
-        }
-
-        stage('Build Docker Image') {
+        stage('Build') {
             steps {
                 script {
-                    docker.build("${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}")
+                    // Build your Docker image
+                    bat 'docker build -t johannesliikanen/tempconverter:latest .'
                 }
             }
         }
 
-        stage('Push Docker Image to Docker Hub') {
+        stage('Push') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub-johannes-cred',
-                        usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-
-                        // Try Docker login
-                        bat 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
-
-                        // Push image to Docker Hub
-                        docker.withRegistry('https://index.docker.io/v1/', '') {
-                            docker.image("${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}").push()
-                        }
-
-                        // Logout after push
-                        bat 'docker logout'
-                    }
+                    // Push the Docker image to Docker Hub
+                    bat 'docker push johannesliikanen/tempconverter:latest'
                 }
             }
         }
