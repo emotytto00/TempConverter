@@ -28,7 +28,7 @@ pipeline {
                         usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
 
                         // Try Docker login
-                        sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
+                        bat 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
 
                         // Push image to Docker Hub
                         docker.withRegistry('https://index.docker.io/v1/', '') {
@@ -36,7 +36,7 @@ pipeline {
                         }
 
                         // Logout after push
-                        sh 'docker logout'
+                        bat 'docker logout'
                     }
                 }
             }
